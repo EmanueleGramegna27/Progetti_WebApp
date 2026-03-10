@@ -108,3 +108,45 @@ CREATE TABLE STOCK (
     FOREIGN KEY (id_negozio) REFERENCES NEGOZI(id_negozio),
     FOREIGN KEY (id_prodotto) REFERENCES PRODOTTI(id_prodotto)
 );
+
+-- 4. REALIZZAZIONE_LAVORAZIONE (Collega Staff a Lavorazione)
+CREATE TABLE REALIZZAZIONE_LAVORAZIONE (
+    id_realizzazione INT AUTO_INCREMENT PRIMARY KEY,
+    id_staff INT,
+    id_lavorazione INT,
+    percentuale_commissione DECIMAL(5,2),
+    FOREIGN KEY (id_staff) REFERENCES STAFF(id_staff),
+    FOREIGN KEY (id_lavorazione) REFERENCES LAVORAZIONE(id_lavorazione)
+);
+
+-- 5. GESTIONE_PRENOTAZIONE (Log operazioni Staff su Prenotazione)
+CREATE TABLE GESTIONE_PRENOTAZIONE (
+    id_gestione_prenotazione INT AUTO_INCREMENT PRIMARY KEY,
+    id_staff INT,
+    id_prenotazione INT,
+    tipo_operazione VARCHAR(30),
+    timestamp_gestione DATETIME,
+    FOREIGN KEY (id_staff) REFERENCES STAFF(id_staff),
+    FOREIGN KEY (id_prenotazione) REFERENCES PRENOTAZIONE(id_prenotazione)
+);
+
+-- 7. CLIENTI_NEGOZIO (Relazione N:N Clienti-Negozi)
+CREATE TABLE CLIENTI_NEGOZIO (
+    id_frequentazione INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT,
+    id_negozio INT,
+    note_locali TEXT,
+    FOREIGN KEY (id_cliente) REFERENCES CLIENTI(id_cliente),
+    FOREIGN KEY (id_negozio) REFERENCES NEGOZI(id_negozio)
+);
+
+-- 8. SERVIZI_PERSONALIZZATI (Prezzi dedicati per Cliente)
+CREATE TABLE SERVIZI_PERSONALIZZATI (
+    id_servizio_personalizzato INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT,
+    id_servizio INT,
+    prezzo_dedicato DECIMAL(10,2),
+    note_preferenza VARCHAR(255),
+    FOREIGN KEY (id_cliente) REFERENCES CLIENTI(id_cliente),
+    FOREIGN KEY (id_servizio) REFERENCES SERVIZI(id_servizio)
+);
