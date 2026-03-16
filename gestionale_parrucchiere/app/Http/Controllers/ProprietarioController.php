@@ -63,6 +63,29 @@ class ProprietarioController extends Controller{
 
     }
 
+    public function login(Request $request){
+
+      $request->validate([
+        'email'=>'required|email',
+        'password'=>'required',
+      ]);
+      
+      $proprietario = Proprietario::where('email',$request->email)->first();
+
+      if(!$proprietario || !Hash::check($request->password,$proprietario->password)){
+        return response()->json(['message'=>'Credenziali errate'],401);
+      }
+
+      $token = $proprietario->createToken('auth_token')->plainTextToken;
+
+      return response()->json([
+        'message'=>'Login effettuato con successo!',
+        'access_token' =>$token,
+        'token_type'=>'Bearer',
+      ],200);
+
+    }
+
 
 
 }
